@@ -17,15 +17,17 @@ QuandlConnect()
 
 
 # 1. CFTC -----------------------------------------------------------------
-CFTC.AUD <- Quandl("CFTC/TIFF_CME_AD_ALL"
-                   # , transform = "normalize"
-                   # , type = "xts"
-                   )
-CFTC.CAD <- Quandl("CFTC/TIFF_CME_CD_ALL"
-                   # , transform = "normalize"
-                   # , type = "xts"
-)
+calNet <- function(x,y){
+  net <- (x-y)/(x+y)
+  return(net)
+}
 
+CFTC.AUD <- Quandl("CFTC/TIFF_CME_AD_ALL")
+CFTC.AUD <- as.xts(calNet(CFTC.AUD$`Total Reportable Long Positions`,CFTC.AUD$`Total Reportable Short Positions`),CFTC.AUD$Date)
+CFTC.CAD <- Quandl("CFTC/TIFF_CME_CD_ALL")
+CFTC.CAD <- as.xts(calNet(CFTC.CAD$`Total Reportable Long Positions`,CFTC.CAD$`Total Reportable Short Positions`),CFTC.CAD$Date)
+
+all.CFTC <- na.omit(merge(CFTC.AUD, CFTC.CAD))
 
 
 # 2. Equity Index ---------------------------------------------------------
@@ -70,3 +72,28 @@ EI.JKSE <- Quandl("YAHOO/INDEX_JKSE")
 # Vietnam
 # UK
 # Italy
+
+all.equity.index <- merge(as.xts(EI.ASX$`Adjusted Close`, EI.ASX$Date)
+                          ,as.xts(EI.TSX$`Adjusted Close`, EI.TSX$Date)
+                          ,as.xts(EI.USA$`Adjusted Close`, EI.USA$Date)
+                          ,as.xts(EI.SSEC$`Adjusted Close`, EI.SSEC$Date)
+                          ,as.xts(EI.MXX$`Adjusted Close`, EI.MXX$Date)
+                          ,as.xts(EI.GDAXI$`Adjusted Close`, EI.GDAXI$Date)
+                          ,as.xts(EI.NIKKEI$`Close Price`, EI.NIKKEI$Date)
+                          ,as.xts(EI.KS11$`Adjusted Close`, EI.KS11$Date)
+                          ,as.xts(EI.FCHI$`Adjusted Close`, EI.FCHI$Date)
+                          ,as.xts(EI.SSMI$`Adjusted Close`, EI.SSMI$Date)
+                          ,as.xts(EI.BSESN$`Adjusted Close`, EI.BSESN$Date)
+                          ,as.xts(EI.BCB$Value, EI.BCB$Date)
+                          ,as.xts(EI.AEX$`Adjusted Close`, EI.AEX$Date)
+                          ,as.xts(EI.GDAXI$`Adjusted Close`, EI.GDAXI$Date)
+                          ,as.xts(EI.STI$`Adjusted Close`, EI.STI$Date)
+                          ,as.xts(EI.NZ50$`Adjusted Close`, EI.NZ50$Date)
+                          ,as.xts(EI.JKSE$`Adjusted Close`, EI.JKSE$Date))
+names(all.equity.index) <- c("ASX", "TSX", "SP500", "SSEC", "MXX", "GDAXI",
+                             "NIKKEI", "KS11", "FCHI", "SSMI", "BSESN", "BCB",
+                             "AEX", "GDAXI", "STI", "NZ50", "JKSE")
+all.equity.index <- na.omit(all.equity.index)
+
+
+save(AUDUSD, CADUSD, all.CFTC, all.equity.index, all.bonds, file = "data/modelingRawData.RData")
