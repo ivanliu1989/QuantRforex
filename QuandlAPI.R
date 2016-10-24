@@ -23,9 +23,9 @@ calNet <- function(x,y){
 }
 
 CFTC.AUD <- Quandl("CFTC/TIFF_CME_AD_ALL")
-CFTC.AUD <- as.xts(calNet(CFTC.AUD$`Total Reportable Long Positions`,CFTC.AUD$`Total Reportable Short Positions`),CFTC.AUD$Date)
+CFTC.AUD <- as.xts(calNet(CFTC.AUD$`Lev Money Long Positions`,CFTC.AUD$`Lev Money Short Positions`),CFTC.AUD$Date)
 CFTC.CAD <- Quandl("CFTC/TIFF_CME_CD_ALL")
-CFTC.CAD <- as.xts(calNet(CFTC.CAD$`Total Reportable Long Positions`,CFTC.CAD$`Total Reportable Short Positions`),CFTC.CAD$Date)
+CFTC.CAD <- as.xts(calNet(CFTC.CAD$`Lev Money Long Positions`,CFTC.CAD$`Lev Money Short Positions`),CFTC.CAD$Date)
 
 all.CFTC <- na.omit(merge(CFTC.AUD, CFTC.CAD))
 
@@ -72,6 +72,7 @@ EI.JKSE <- Quandl("YAHOO/INDEX_JKSE")
 # Vietnam
 # UK
 # Italy
+
 
 all.equity.index <- merge(as.xts(EI.ASX$`Adjusted Close`, EI.ASX$Date)
                           ,as.xts(EI.TSX$`Adjusted Close`, EI.TSX$Date)
