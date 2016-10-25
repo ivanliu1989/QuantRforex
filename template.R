@@ -3,12 +3,11 @@ library(TTR)
 library(e1071)
 library(ggplot2)
 library(AutoPairTrading)
-library(inte)
 
 
-data = getFX("EUR/USD",from="2005-01-01")
+# data = getFX("EUR/USD",from="2005-01-01")
 # data = AUDUSD
-macd_data <- MACD(data, nFast = 12, nSlow = 26, nSig = 9, maType = "EMA", percent = FALSE)
+# macd_data <- MACD(data, nFast = 12, nSlow = 26, nSig = 9, maType = "EMA", percent = FALSE)
 
 
 
@@ -17,11 +16,43 @@ macd_data <- MACD(data, nFast = 12, nSlow = 26, nSig = 9, maType = "EMA", percen
 # close(con)
 # plota.test()
 
+reqHistoryFX2 <- function(tws = NULL, duration = "10 Y", barsize = "1 day", Cur1 = "USD", Cur2 = "CAD"){
+  library(IBrokers)
+  if(is.null(tws)){
+    tws <- twsConnect(clientId = 999)
+  }
+  
+  ccy <- reqContractDetails(tws, twsCurrency(Cur1, Cur2))[[1]]$contract
+  
+  BIDASK <- reqHistoricalData(conn = tws, Contract = ccy, barSize = barsize,
+                              duration = duration, useRTH = "1", whatToShow='MIDPOINT')
+  
+  BID <- reqHistoricalData(conn = tws, Contract = ccy, barSize = barsize,
+                           duration = duration, useRTH = "1", whatToShow='BID')
+  
+  ASK <- reqHistoricalData(conn = tws, Contract = ccy, barSize = barsize,
+                           duration = duration, useRTH = "1", whatToShow='ASK')
+  
+  CleanData <- merge(BIDASK[,4], BID[,4], ASK[, 4])
+  colnames(CleanData) <- c("Close.price", "Bid.price", "Ask.price")
+  
+  res <- list(BIDASK = BIDASK,
+              BID = BID,
+              ASK = ASK,
+              CleanData = CleanData)
+  
+  if(is.null(tws)){
+    twsDisconnect(tws)
+  }
+  
+  return(res)
+}
+
 
 
 # Read data and use indicators --------------------------------------------
 # Using MACD and Parabolic SAR as indicators ------------------------------
-data = reqHistoryFX(tws = NULL, duration = "2 Y", barsize = "1 hour", Cur1 = "EUR", Cur2 = "USD")
+data = reqHistoryFX2(tws = NULL, duration = "6 Y", barsize = "1 hour", Cur1 = "EUR", Cur2 = "USD")
 head(data$BIDASK)
 data = data$BIDASK[,1:4]
 colnames(data) <- c("Open", "High", "Low", "Close")
