@@ -1,5 +1,5 @@
 library(AutoPairTrading)
-getUserTemplate2()
+# getUserTemplate2()
 
 
 # 0. Env setup ------------------------------------------------------------
@@ -72,7 +72,8 @@ all.bonds$IR.CAN.10.3 = (all.bonds$CAN10Y+100)/(all.bonds$CAN3Y+100)
 all.bonds$IR.CAN.10.5 = (all.bonds$CAN10Y+100)/(all.bonds$CAN5Y+100)
 
 all.bonds = all.bonds[, -c(1:12)]
-
+PerformanceAnalytics::chart.TimeSeries(all.bonds[tscale])
+PerformanceAnalytics::chart.TimeSeries(price.ratio)
 
 # 9. Quandl data -----------------------------------------------------------
 library(AutoPairTrading)
@@ -90,7 +91,7 @@ CFTC.CAD <- Quandl("CFTC/TIFF_CME_CD_ALL")
 CFTC.CAD <- as.xts(calNet(CFTC.CAD$`Lev Money Long Positions`,CFTC.CAD$`Lev Money Short Positions`),CFTC.CAD$Date)
 
 all.CFTC <- na.omit(merge(CFTC.AUD, CFTC.CAD))
-
+PerformanceAnalytics::chart.TimeSeries(all.CFTC[tscale])
 
 # 9.2. Equity Index ---------------------------------------------------------
 # AU
@@ -157,7 +158,7 @@ names(all.equity.index) <- c("ASX", "TSX", "SP500", "SSEC", "MXX", "GDAXI",
                              "NIKKEI", "KS11", "FCHI", "SSMI", "BSESN", "BCB",
                              "AEX", "GDAXI", "STI", "NZ50", "JKSE")
 all.equity.index <- na.omit(all.equity.index)
-
+PerformanceAnalytics::chart.TimeSeries(all.equity.index[tscale])
 
 
 # 10. ARMIA + GARCH -------------------------------------------------------

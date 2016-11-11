@@ -16,18 +16,18 @@ names(price.ratio) = "price.ratio"
 
 
 # 1.2 Extract data from interactive brokers -------------------------------
-# CADUSD <- reqHistoryFX(duration = "10 Y", barsize = "1 day", Cur1 = "USD", Cur2 = "CAD")$CleanData
-# CADUSD <- 1/CADUSD
-# AUDUSD <- reqHistoryFX(duration = "10 Y", barsize = "1 day", Cur1 = "AUD", Cur2 = "USD")$CleanData
-# NZDUSD <- reqHistoryFX(duration = "10 Y", barsize = "1 day", Cur1 = "NZD", Cur2 = "USD")$CleanData
-# 
-# tscale <- "2014-01-01/2016-07-22"
-# y.series = AUDUSD[tscale]
-# x.series = CADUSD[tscale]
-# y = y.series$Close.price
-# x = x.series$Close.price
-# price.ratio <- getPriceRatio(y, x, FALSE)
-# names(price.ratio) = "price.ratio"
+CADUSD <- reqHistoryFX(duration = "10 Y", barsize = "1 day", Cur1 = "USD", Cur2 = "CAD")$CleanData
+CADUSD <- 1/CADUSD
+AUDUSD <- reqHistoryFX(duration = "10 Y", barsize = "1 day", Cur1 = "AUD", Cur2 = "USD")$CleanData
+NZDUSD <- reqHistoryFX(duration = "10 Y", barsize = "1 day", Cur1 = "NZD", Cur2 = "USD")$CleanData
+
+tscale <- "2014-01-01/2016-07-22"
+y.series = AUDUSD[tscale]
+x.series = CADUSD[tscale]
+y = y.series$Close.price
+x = x.series$Close.price
+price.ratio <- getPriceRatio(y, x, FALSE)
+names(price.ratio) = "price.ratio"
 
 
 # 2. Correlation tests ----------------------------------------------------
