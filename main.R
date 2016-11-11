@@ -346,3 +346,6 @@ testdata = data.frame(test_data, predictions2)
 accuracy2 = (sum(testdata$predictions == testdata$target)/nrow(testdata))*100
 print(accuracy2)
 
+ggplot(trainingdata, aes(x=price.ratio, y=price.ratio.1)) +
+  stat_density2d(geom="contour",aes(color=predictions)) +
+  labs(title="SVM Predictions", x="lag1", y="lag2", color="Training Predictions")
