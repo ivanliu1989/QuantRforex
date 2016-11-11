@@ -11,7 +11,7 @@ spReturns[as.character(head(index(Cl(GSPC)),1))] = 0
 windowLength = 500
 foreLength = length(spReturns) - windowLength
 forecasts <- vector(mode="character", length=foreLength)
-for (d in 0:foreLength) {
+for (d in 3016:foreLength) {
   # Obtain the S&P500 rolling window for this day
   spReturnsOffset = spReturns[(1+d):(windowLength+d)]
   # Fit the ARIMA model
@@ -53,7 +53,7 @@ for (d in 0:foreLength) {
   # Output the results to the screen and the forecasts vector
   if(is(fit, "warning")) {
     forecasts[d+1] = paste(
-      index(spReturnsOffset[windowLesngth]), 1, sep=","
+      index(spReturnsOffset[windowLength]), 1, sep=","
     )
     print(
       paste(
