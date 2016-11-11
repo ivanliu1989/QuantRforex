@@ -158,7 +158,7 @@ names(all.equity.index) <- c("ASX", "TSX", "SP500", "SSEC", "MXX", "GDAXI",
                              "NIKKEI", "KS11", "FCHI", "SSMI", "BSESN", "BCB",
                              "AEX", "GDAXI", "STI", "NZ50", "JKSE")
 all.equity.index <- na.omit(all.equity.index)
-PerformanceAnalytics::chart.TimeSeries(all.equity.index[tscale])
+PerformanceAnalytics::chart.TimeSeries(scale(all.equity.index[tscale]), legend.loc = 'right')
 
 
 # 10. ARMIA + GARCH -------------------------------------------------------
@@ -168,7 +168,7 @@ library(rugarch)
 
 # Create the forecasts vector to store the predictions
 spReturns = diff(log(price.ratio))
-windowLength = 250
+windowLength = 500
 foreLength = length(spReturns) - windowLength
 forecasts <- vector(mode="character", length=foreLength)
 for (d in 1:foreLength) {
