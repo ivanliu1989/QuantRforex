@@ -26,7 +26,7 @@ updatePortf(portfolio.st)
 updateAcct(account.st)
 updateEndEq(account.st)
 
-
+symbol = forex.str
 
 # Chart Positions ---------------------------------------------------------
 for(symbol in symbols) {

@@ -5,7 +5,7 @@ library(quantstrat)
 library(doMC)
 registerDoMC(cores = parallel::detectCores())
 
-stock.str <- "AAPL" # what are we trying it on
+forex.str <- "AUD_USD" # what are we trying it on
 
 #MA parameters for MACD
 fastMA <- 12 
@@ -16,7 +16,8 @@ maType <- "EMA"
 .SlowMA <- (30:80)
 
 currency("USD")
-stock(stock.str, currency = "USD", multiplier = 1)
+# stock(stock.str, currency = "USD", multiplier = 1)
+instrument(forex.str, currency = "USD", multiplier = 1)
 
 start_date <- "2006-12-31"
 initEq <- 1000000
@@ -26,7 +27,7 @@ account.st <- "macd"
 rm.strat(portfolio.st)
 rm.strat(account.st)
 
-initPortf(portfolio.st, symbols = stock.str)
+initPortf(portfolio.st, symbols = forex.str)
 initAcct(account.st, portfolios = portfolio.st)
 initOrders(portfolio = portfolio.st)
 
@@ -110,8 +111,16 @@ add.distribution.constraint(strat.st,
                             operator = "<",
                             label = "MA")
 
-
-getSymbols(stock.str, from = start_date, to = "2014-06-01")
+stock.str = "AAPL"
+# getSymbols(stock.str, from = start_date, to = "2014-06-01")
+AUD_USD = getOandaInstrumentCandles(.oandaEnv$ACCOUNT_TYPE, .oandaEnv$ACCESS_TOKEN, INSTRUMENTS = 'AUD_USD', price = 'M', granularity = 'M5', count = 5000)
+AUD_USD$complete <- NULL
+names(AUD_USD) <- c("time", "Volume", "Close", "High", "Low", "Open")
+AUD_USD = as.xts(AUD_USD, order.by = AUD_USD$time)
+AUD_USD$time = NULL
+for(i in 1:ncol(AUD_USD)){
+  AUD_USD[,i] = as.numeric(AUD_USD[,i])
+}
 
 results <- apply.paramset(strat.st, 
                           paramset.label = "MA", 
@@ -124,5 +133,5 @@ updatePortf(Portfolio = portfolio.st,Dates = paste("::",as.Date(Sys.time()),sep 
 end_t <- Sys.time()
 print(end_t-start_t)
 
-
+save.strategy(strat.st)
 # Time difference of 1.257432 mins
