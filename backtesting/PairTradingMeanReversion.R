@@ -3,10 +3,11 @@ library(tseries)
 library(IKTrading)
 library(PerformanceAnalytics)
 
-# .blotter holds the portfolio and account object and .strategy holds the orderbook and strategy object
+ls(.blotter)
+ls(.strategy)
 
-# .blotter <- new.env()
-# .strategy <- new.env()
+portfolio.st <- 'pairStrat'
+account.st <- 'pairStrat'
 rm.strat(portfolio.st)
 rm.strat(account.st)
 
@@ -37,7 +38,7 @@ legend(x=5, y=50, legend=c("EMA 20"), fill=c("blue"), bty="n")
 
 #Inititalize strategy, portfolio, account and orders
 
-qs.strategy <- 'pairStrat'
+
 initPortf(qs.strategy, symbols = symbols, initDate=initDate)
 initAcct(qs.strategy, portfolios=qs.strategy, initDate=initDate,initEq=initEq)
 initOrders(qs.strategy,initDate=initDate)

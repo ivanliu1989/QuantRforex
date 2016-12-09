@@ -1,4 +1,4 @@
-source("~/analytics/Workspace/backtesting/1_BackTesting.R")
+source("~/analytics/QuantRforex/backtesting/1_BackTesting.R")
 # 1. Basic variables ------------------------------------------------------
 Sys.setenv(TZ = "UTC")
 currency('USD')
